@@ -1,0 +1,116 @@
+[
+  {
+    "title": "LemmaBench: A Live, Research-Level Benchmark to Evaluate LLM Capabilities in Mathematics",
+    "authors": "Antoine Peyronnet, Fabian Gloeckle, Amaury Hayat",
+    "venue": "arXiv preprint, 2026",
+    "year": "2026",
+    "link": "https://arxiv.org/abs/2602.24173",
+    "link_type": "[arXiv]"
+  },
+  {
+    "title": "Reinforcement Learning for Hierarchical Proof Generation in Lean 4",
+    "authors": "Fabian Gloeckle, Alex Gu, Gabriel Synnaeve, Amaury Hayat",
+    "venue": "MATH-AI Workshop at NeurIPS 2025",
+    "year": "2025",
+    "link": "https://openreview.net/forum?id=238",
+    "link_type": "[OpenReview]"
+  },
+  {
+    "title": "CWM: An Open-Weights LLM for Research on Code Generation with World Models",
+    "authors": "FAIR CodeGen team",
+    "venue": "arXiv preprint, 2025",
+    "year": "2025",
+    "link": "https://arxiv.org/abs/2510.02387",
+    "link_type": "[arXiv]",
+    "extra_links": [
+      {
+        "url": "https://github.com/facebookresearch/cwm",
+        "label": "[Code]"
+      },
+      {
+        "url": "https://huggingface.co/facebook/cwm",
+        "label": "[Weights]"
+      }
+    ]
+  },
+  {
+    "title": "ProofOptimizer: Training Language Models to Simplify Proofs without Human Demonstrations",
+    "authors": "Alex Gu, Bartosz Piotrowski, Fabian Gloeckle, Kaiyu Yang, Aram H. Markosyan",
+    "venue": "ICLR 2026",
+    "year": "2025",
+    "link": "https://arxiv.org/abs/2510.15700",
+    "link_type": "[arXiv]"
+  },
+  {
+    "title": "The KoLMogorov Test: Compression by Code Generation",
+    "authors": "Ori Yoran, Kunhao Zheng, Fabian Gloeckle, Jonas Gehring, Gabriel Synnaeve, Taco Cohen",
+    "venue": "ICLR 2025",
+    "year": "2025",
+    "link": "https://arxiv.org/abs/2503.13992",
+    "link_type": "[arXiv]",
+    "extra_links": [
+      {
+        "url": "https://github.com/facebookresearch/kolmogorov",
+        "label": "[Code]"
+      }
+    ]
+  },
+  {
+    "title": "ABEL: Sample Efficient Online Reinforcement Learning for Neural Theorem Proving",
+    "authors": "Fabian Gloeckle, Jannis Limperg, Gabriel Synnaeve, Amaury Hayat",
+    "venue": "MATH-AI Workshop at NeurIPS 2024",
+    "year": "2024",
+    "link": "https://openreview.net/forum?id=kk3mSjVCUO",
+    "link_type": "[OpenReview]",
+    "extra_links": [
+      {
+        "url": "https://github.com/facebookresearch/abel",
+        "label": "[Code]"
+      }
+    ]
+  },
+  {
+    "title": "Better & Faster Large Language Models via Multi-Token Prediction",
+    "authors": "Fabian Gloeckle*, Badr Youbi Idrissi*, Baptiste Rozière, David Lopez-Paz, Gabriel Synnaeve (* joint first)",
+    "venue": "ICML 2024",
+    "year": "2024",
+    "link": "https://openreview.net/forum?id=uN6J7f2tD4",
+    "link_type": "[OpenReview]",
+    "extra_links": [
+      {
+        "url": "https://huggingface.co/facebook/multi-token-prediction",
+        "label": "[Weights]"
+      },
+      {
+        "url": "https://github.com/facebookresearch/lingua",
+        "label": "[Code]"
+      }
+    ]
+  },
+  {
+    "title": "Code Llama: Open Foundation Models for Code",
+    "authors": "Baptiste Rozière*, Jonas Gehring*, Fabian Gloeckle*, Sten Sootla*, Itai Gat, Xiaoqing Ellen Tan, Yossi Adi, Jingyu Liu, Romain Sauvestre, Tal Remez, Jérémy Rapin, Artyom Kozhevnikov, Ivan Evtimov, Joanna Bitton, Manish Bhatt, Cristian Canton Ferrer, Aaron Grattafiori, Wenhan Xiong, Alexandre Défossez, Jade Copet, Faisal Azhar, Hugo Touvron, Louis Martin, Nicolas Usunier, Thomas Scialom, Gabriel Synnaeve* (* core contributor)",
+    "venue": "arXiv preprint, 2023",
+    "year": "2023",
+    "link": "https://arxiv.org/abs/2308.12950",
+    "link_type": "[arXiv]",
+    "extra_links": [
+      {
+        "url": "https://github.com/meta-llama/codellama",
+        "label": "[Code]"
+      },
+      {
+        "url": "https://huggingface.co/meta-llama/CodeLlama-7b",
+        "label": "[Weights]"
+      }
+    ]
+  },
+  {
+    "title": "Temperature-Scaled Large Language Models for Lean Proofstep Prediction",
+    "authors": "Fabian Gloeckle, Baptiste Rozière, Amaury Hayat, Gabriel Synnaeve",
+    "venue": "MATH-AI Workshop at NeurIPS 2023",
+    "year": "2023",
+    "link": "https://openreview.net/forum?id=sSgdyY0YJR",
+    "link_type": "[OpenReview]"
+  }
+]

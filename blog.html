@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Fabian Gloeckle</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="description" content="Blog and writings by Fabian Gloeckle.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/blog.css">
+
+        <script>
+            (function () {
+                try {
+                    var theme = localStorage.getItem('theme');
+                    if (theme === 'light' || theme === 'dark') {
+                        document.documentElement.setAttribute('data-theme', theme);
+                    }
+                } catch (e) {
+                    // ignore
+                }
+            })();
+        </script>
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <a href="index.html" class="logo" aria-label="Home">Fabian Gloeckle</a>
+            <nav>
+                <ul>
+                    <li><a href="assets/CV.pdf" target="_blank">CV</a></li>
+                    <li><a href="index.html#publications">Publications</a></li>
+                    <li><a href="blog.html" class="active">Blog</a></li>
+                    <li>
+                        <details>
+                            <summary aria-label="Settings" title="Settings">⚙</summary>
+                            <div class="settings-dropdown" aria-label="Theme">
+                                <button type="button" data-set-theme="system">Theme: System</button>
+                                <button type="button" data-set-theme="dark">Theme: Dark</button>
+                                <button type="button" data-set-theme="light">Theme: Light</button>
+                            </div>
+                        </details>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Blog</h1>
+            <p style="color: var(--secondary-text); margin-bottom: 3rem;">Sporadic posts about machine learning, math, and things I find interesting.</p>
+
+            <ul class="post-list">
+                <li class="post-item">
+                    <div class="post-date">Mar 27, 2026</div>
+                    <h2 class="post-title"><a href="blog/alpha.html">Length-controlled Baselines in Reinforcement Learning with Language Models</a></h2>
+                    <p class="post-excerpt">We propose a modification to the GRPO reward baseline that might lead to more stable training of reasoning models, with initial empirical evidence.</p>
+                    <div class="post-tags"><span class="tag-chip">RL</span></div>
+                </li>
+                <li class="post-item">
+                    <div class="post-date">Mar 26, 2026</div>
+                    <h2 class="post-title"><a href="blog/dt.html">From Decision Theories to Multi-Agent Reinforcement Learning</a></h2>
+                    <p class="post-excerpt">Notes on rational decision-making in predictor environments and how it relates to RL.</p>
+                    <div class="post-tags"><span class="tag-chip">Alignment</span><span class="tag-chip">RL</span></div>
+                </li>
+                <li class="post-item">
+                    <div class="post-date">Mar 24, 2026</div>
+                    <h2 class="post-title"><a href="blog/newcomb.html">Newcomb's Paradox, Free Will and Superintellignce</a></h2>
+                    <p class="post-excerpt">What could Newcomb's Paradox on near-perfect prediction of human behavior mean for alignment?</p>
+                    <div class="post-tags"><span class="tag-chip">Alignment</span></div>
+                </li>
+            </ul>
+        </main>
+        
+        <footer style="margin-top: 4rem; text-align: center; padding-bottom: 2rem; color: var(--secondary-text); font-size: 0.85rem;">
+            &copy; 2026 Fabian Glöckle.
+        </footer>
+    </div>
+
+    <script src="js/theme.js" defer></script>
+</body>
+</html>

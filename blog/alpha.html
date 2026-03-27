@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Length-controlled Baselines in Reinforcement Learning with Language Models | Fabian Gloeckle</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <!-- Adjust path relative to the blog directory -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/blog.css">
+
+        <script>
+            (function () {
+                try {
+                    var theme = localStorage.getItem('theme');
+                    if (theme === 'light' || theme === 'dark') {
+                        document.documentElement.setAttribute('data-theme', theme);
+                    }
+                } catch (e) {
+                    // ignore
+                }
+            })();
+        </script>
+    
+    <!-- MathJax for LaTeX Support -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, function (doc) {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+              }
+            }, '']
+          }
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <a href="../index.html" class="logo" aria-label="Home">Fabian Gloeckle</a>
+            <nav>
+                <ul>
+                    <li><a href="../assets/CV.pdf" target="_blank">CV</a></li>
+                    <li><a href="../index.html#publications">Publications</a></li>
+                    <li><a href="../blog.html" class="active">Blog</a></li>
+                    <li>
+                        <details>
+                            <summary aria-label="Settings" title="Settings">⚙</summary>
+                            <div class="settings-dropdown" aria-label="Theme">
+                                <button type="button" data-set-theme="system">Theme: System</button>
+                                <button type="button" data-set-theme="dark">Theme: Dark</button>
+                                <button type="button" data-set-theme="light">Theme: Light</button>
+                            </div>
+                        </details>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <a href="../blog.html" class="back-link">&larr; Back to all posts</a>
+            
+            <article>
+                <header class="post-header">
+                    <h1>Length-controlled Baselines in Reinforcement Learning with Language Models</h1>
+                    <div class="post-meta">Published on Mar 27, 2026</div>
+                    <div class="post-tags"><span class="tag-chip">RL</span></div>
+                </header>
+                
+                <div class="post-content">
+<p>A question that has always bugged and fascinated me in reinforcement learning with language models is the duality of perspectives by which it can be viewed: as a long trajectory of token-level actions and with sparse final rewards, or as a single-action (bandit) environment where the entire answer is the action. This has repercussions on the way we do importance sampling, value modeling, KL penalties and - discussed in the following - reward baselines. </p>
+<p>By accounting for token gradient correlation within the same sequence, we derive an optimal <script type="math/tex">\mathrm{length}^\alpha</script>-weighted reward baseline. It naturally induces a stabilizing pessimistic bias recently shown to prevent training collapse in reasoning models in a theoretically justified manner. Experts can directly skip to the last sections.</p>
+<h2>The Setup</h2>
+<p>Consider the REINFORCE estimator of the policy gradient
+<script type="math/tex; mode=display">
+\nabla_\theta J(\theta)
+=
+\mathbb{E}[r  \nabla_\theta \log \pi_\theta(a\mid s)] = \mathbb{E}[r g],
+</script>
+writing <script type="math/tex">g \;:=\; \nabla_\theta \log \pi_\theta(a\mid s)</script>.</p>
+<p>By the score identity, <script type="math/tex">\mathbb{E}[g] = 0</script>, so we can subtract any baseline <script type="math/tex">b</script> that is independent of <script type="math/tex">a</script> conditional on <script type="math/tex">s</script> without introducing bias:
+<script type="math/tex; mode=display">
+\mathbb{E}[r g]
+=
+\mathbb{E}[(r-b)g].
+</script>
+</p>
+<p>What is the optimal constant baseline <script type="math/tex">b</script>?</p>
+<h2>Deriving the Optimal Baseline</h2>
+<p>The optimal baseline minimizes the trace of the covariance
+<script type="math/tex; mode=display">
+\operatorname{Tr} \operatorname{Var}((r-b)g)
+= \operatorname{Tr} \operatorname{Cov}((r-b)g, (r-b)g) 
+</script>
+with <script type="math/tex">g \in \mathbb{R}^d</script> vector-valued.</p>
+<p>Using bilinearity of covariance, we get:
+<script type="math/tex; mode=display">
+\operatorname{Tr} \operatorname{Var}((r-b)g)
+=
+\operatorname{Tr} \operatorname{Var}(rg) 
+- 2b  \operatorname{Tr} \operatorname{Cov}(rg, g)
++ b^2  \operatorname{Tr} \operatorname{Var}(g).
+</script>
+</p>
+<p>Setting the derivative by <script type="math/tex">b</script> to zero leads to
+<script type="math/tex; mode=display">
+b^* = \frac{\operatorname{Tr} \operatorname{Cov}(rg, g)}{\operatorname{Tr} \operatorname{Var}(g)}
+= \frac{\mathbb{E}[r\|g\|^2]}{\mathbb{E}[\|g\|^2]}
+</script>
+because <script type="math/tex">\mathbb{E}[g] = 0</script>.</p>
+<p>This makes intuitive sense: the variance-minimizing <script type="math/tex">b</script> in <script type="math/tex">(r-b)g</script> is not the average of <script type="math/tex">r</script>, but the average weighted by magnitude of <script type="math/tex">g</script>.</p>
+<p>By default, in reinforcement learning we make the assumption that <script type="math/tex">r</script> and <script type="math/tex">\|g\|^2</script> are independent, in which case the term simplifies to the known <script type="math/tex">b^* = \mathbb{E}[r]</script>.</p>
+<h2>Token-level vs Sequence-level Actions</h2>
+<p>Let us now get back to the two complementary views of RL with LLMs in terms of its action space.</p>
+<p>For <strong>token-level actions</strong>, we use the reward-to-go for <script type="math/tex">r</script> (which in many setups simply happens to be the final end of sequence reward for all tokens) and <script type="math/tex">g_t = \nabla_\theta \log \pi_\theta(a_t \mid s_t)</script> is the gradient of the <script type="math/tex">t</script>-th token. Using the default <script type="math/tex">b = \mathbb{E}[r]</script> baseline then reduces to taking a mean-baseline <em>at the token level</em> (each token receives the same weight, not each sequence). In other words, if <script type="math/tex">r_i</script> is the reward of the <script type="math/tex">i</script>-th trajectory in GRPO and <script type="math/tex">T_i</script> is its length, the baseline is
+<script type="math/tex; mode=display">
+b = \frac{\sum_i r_i T_i}{\sum_i T_i}.
+</script> 
+Our team has ablated and used this choice in Code World Model.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>For <strong>sequence-level actions</strong>, the action is <script type="math/tex">a_{1:T}</script>, so the gradient is the sum of token gradients
+<script type="math/tex; mode=display">
+g = \nabla_\theta \log \pi_\theta(a \mid s) = \sum_{t=1}^T \nabla_\theta \log \pi_\theta(a_t \mid s_t) = \sum_{t=1}^T g_t.
+</script>
+Crucially, the gradient magnitude therefore depends on the correlation between the <script type="math/tex">g_t</script>.</p>
+<ul>
+<li>If token gradients <script type="math/tex">g_t</script> are <strong>uncorrelated</strong> and identically distributed, we have
+    <script type="math/tex; mode=display">
+    \|g\|^2 = \operatorname{Tr} \operatorname{Var} g = \sum_{t=1}^T \operatorname{Tr} \operatorname{Var} g_t = T \|g_1\|^2
+    </script>
+    and <script type="math/tex">\|g\| \in \mathcal{O}(T^{1/2})</script>.</li>
+<li>If token gradients <script type="math/tex">g_t</script> are <strong>fully correlated</strong>, we have <script type="math/tex">\|g\| \in \mathcal{O}(T)</script>.</li>
+<li>In practice, we expect growth between these extreme cases: <script type="math/tex">\|g\| \in \mathcal{O}(T^\alpha)</script> with <script type="math/tex">\alpha \in (\frac{1}{2},1)</script>. (This reminds of <script type="math/tex">T^\alpha</script> length penalties in decoding with early language models.)</li>
+</ul>
+<p>The assumption of uncorrelated gradients again leads to the token-average baseline
+<script type="math/tex; mode=display">
+b
+= \frac{\mathbb{E}[r\|g\|^2]}{\mathbb{E}[\|g\|^2]}
+\approx
+\frac{\sum_i r_i T_i}{\sum_i T_i}.
+</script>
+Generally, the assumption of <script type="math/tex">\alpha</script>-scaling suggests a <script type="math/tex">T^{2\alpha}</script>-weighted mean baseline
+<script type="math/tex; mode=display">
+b^{(\alpha)}
+= \frac{\mathbb{E}[r\|g\|^2]}{\mathbb{E}[\|g\|^2]}
+\approx
+\frac{\sum_i r_i T_i^{2\alpha}}{\sum_i T_i^{2\alpha}}.
+</script>
+</p>
+<p><strong>Edit:</strong> After writing, I learned of the OPO paper<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> that covers makes the argument for the token-mean baseline with the same derivation.</p>
+<h2>Initial Empirical Evidence</h2>
+<p>While out of big tech compute for now, let me present a quick measurement on the gradient scaling exponent with a small reasoning model.</p>
+<p>We generate reasoning traces with DeepSeek-R1-Distill-Qwen-1.5B on 30 samples from the <code>orca-math-word-problems-200k</code> dataset, capping sequences at 1500 tokens. For each sample, we plot the reasoning trace length <script type="math/tex">T</script> and the squared norm of the sequence gradient <script type="math/tex">\|g\|^2</script>. We compute the scaling coefficient <script type="math/tex">\alpha</script> by linear regression in log-log space, where the slope equals <script type="math/tex">2\alpha</script>.</p>
+<p>Our measurement indicates <script type="math/tex">\alpha \approx 0.8</script> for this small model. If the trend holds for larger datasets and models, an <script type="math/tex">\alpha</script>-scaling weighted baseline might perform better than the current default baselines, without requiring additional compute.</p>
+<p><img alt="Log-log plot" src="../assets/alpha.png" /></p>
+<h2>Context: Stability in RL via Baseline Shifts</h2>
+<p>In a recent paper by colleagues at FAIR,<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup> the authors find that adding a small negative bias to the GRPO sequence mean stabilizes training and prevents collapse. Concretely, they suggest setting
+<script type="math/tex; mode=display">
+b = \frac{1}{n} \sum_{i=1}^n r_i + \delta,
+</script>
+where the average is the sequence-level mean baseline as in GRPO variance and <script type="math/tex">\delta</script> is typically <script type="math/tex">-0.1</script> for 0-1-rewards. The result is pessimism about the policy, i.e. advantages are positive on average, shifting the loss slightly in the direction of positive sample SFT.</p>
+<p>Here, I'd like to make a speculative, heuristic argument for how this might relate to <script type="math/tex">\alpha</script>-scaling.</p>
+<p>The main finding of reasoning models is that over the course of training, longer sequence lengths are correlated with higher rewards (both go up over the course of training). However, at any given point in training, longer response lengths are correlated with <em>lower</em> rewards: These are reasoning traces that "time out" and do not converge on a satisfactory solution for submission.</p>
+<p>Hence, since <script type="math/tex">\alpha</script>-scaling upweighs long sequences in the baseline average (more than the token-mean baseline and even more than the sequence-mean one), we expect the <script type="math/tex">\alpha</script>-scaling baseline <script type="math/tex">b^{(\alpha)}</script> to be <em>lower</em> than the default baselines. This amounts to a similar effect as adding negative <script type="math/tex">\delta</script> as proposed in Asymmetric REINFORCE but now justified as a mechanism for optimal variance reduction. </p>
+<h2>Conclusion</h2>
+<p>Given the importance of training stability for truly scaling reinforcement learning post-training to pretraining levels of compute, we need to pay close attention to details in the reinforcement learning loss. The proposed gradient correlation-aware baseline is trivial to implement, empirically justified and could explain recent observations on training stability linked to baseline bias. Please go ahead and implement it and let me know of the results!</p>
+<h2>References</h2>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Copet, Jade, et al. "CWM: An open-weights LLM for research on code generation with world models." <a href="https://arxiv.org/abs/2510.02387">Arxiv 2025</a>.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Hao, Yaru, et al. "On-policy RL with optimal reward baseline." <a href="https://arxiv.org/abs/2505.23585">Arxiv 2025</a>.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>Arnal, Charles, et al. "Asymmetric REINFORCE for off-policy reinforcement learning: Balancing positive and negative rewards." <a href="https://openreview.net/pdf?id=Ql3sENn0mi">NeurIPS 2025</a>.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+            </article>
+        </main>
+        
+        <footer style="margin-top: 5rem; text-align: center; padding-bottom: 2rem; color: var(--secondary-text); font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 2rem;">
+            &copy; 2026 Fabian Glöckle.
+        </footer>
+    </div>
+
+    <script src="../js/theme.js" defer></script>
+</body>
+</html>

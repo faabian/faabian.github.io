@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabian Gloeckle</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="description" content="Personal website of Fabian Gloeckle.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme');
+                if (theme === 'light' || theme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', theme);
+                }
+            } catch (e) {
+                // ignore
+            }
+        })();
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <header class="site-header site-header--no-brand">
+            <nav>
+                <ul>
+                    <li><a href="assets/CV.pdf" target="_blank">CV</a></li>
+                    <li><a href="#publications">Publications</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li>
+                        <details>
+                            <summary aria-label="Settings" title="Settings">⚙</summary>
+                            <div class="settings-dropdown" aria-label="Theme">
+                                <button type="button" data-set-theme="system">Theme: System</button>
+                                <button type="button" data-set-theme="dark">Theme: Dark</button>
+                                <button type="button" data-set-theme="light">Theme: Light</button>
+                            </div>
+                        </details>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Introduction Section -->
+            <h1 class="desktop-only">Fabian Gloeckle</h1>
+            <section class="intro">
+                <div class="intro-header mobile-only">
+                    <h1>Fabian<br>Gloeckle</h1>
+                    <!-- Portrait image -->
+                    <img src="assets/profile.webp" alt="Fabian Gloeckle Portrait" class="profile-pic-mobile"
+                        onerror="this.style.display='none'">
+                </div>
+                <div class="intro-text">
+                    <p>
+                        I am a machine learning researcher and mathematician working on language models for code and
+                        math. I am completing my PhD at Meta FAIR Paris and Institut Polytechnique de Paris, advised by
+                        <a href="https://cermics.enpc.fr/~hayata/index_en.html" target="_blank"
+                            rel="noopener noreferrer">Amaury Hayat</a> and <a href="https://syhw.github.io/"
+                            target="_blank" rel="noopener noreferrer">Gabriel Synnaeve</a>.
+                    </p>
+                    <p>
+                        My research focuses on improving language model reasoning through better pretraining
+                        (multi-token prediction), explorative and hierarchical reinforcement learning, and inference
+                        scaling. I also have a strong interest in formal mathematics in systems such as Lean. To advance
+                        automated scientific research, we must build highly parallel AI systems that interact with
+                        verifiers, self-verify, and conduct open-ended exploration.
+                    </p>
+                    <p>Email: firstname dot lastname at enpc dot fr</p>
+
+                    <div class="social-links">
+                        <a href="https://github.com/faabian" target="_blank" rel="noopener noreferrer">GitHub</a>
+                        <a href="https://scholar.google.com/citations?user=fcJXuBkAAAAJ" target="_blank"
+                            rel="noopener noreferrer">Google Scholar</a>
+                        <a href="https://twitter.com/FabianGloeckle" target="_blank"
+                            rel="noopener noreferrer">Twitter</a>
+                    </div>
+                </div>
+                <!-- Portrait image -->
+                <img src="assets/profile.webp" alt="Fabian Gloeckle Portrait" class="profile-pic desktop-only"
+                    onerror="this.style.display='none'">
+            </section>
+
+            <!-- Updates / News Section -->
+            <section id="updates">
+                <h2>Updates</h2>
+                <ul class="updates-list">
+                    <li class="update-item">
+                        <span class="update-date">Mar 2026</span>
+                        <span>Finished my PhD contract at FAIR; now on the industry research job market.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Mar 2026</span>
+                        <span>Released <a href="https://github.com/facebookresearch/abel" target="_blank" rel="noopener noreferrer">ABEL</a> open-source.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Dec 2025</span>
+                        <span>Gave a talk at the AI Morning for Mathematics, Laboratoire Jacques-Louis Lions (LJLL),
+                            Sorbonne Université, Paris.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Nov 2025</span>
+                        <span>Gave a talk at Timothy Gowers' seminar, La philosophie de la pratique des mathématiques,
+                            Collège de France, Paris.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Oct 2025</span>
+                        <span>Recognized as a Top Reviewer for NeurIPS 2025.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Sep 2025</span>
+                        <span>Gave a talk at the Machine Learning and AI for Mathematics workshop, Mathematisches
+                            Forschungsinstitut Oberwolfach (MFO), Germany.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Sep 2025</span>
+                        <span>Gave a talk at the Mechanization and Mathematical Research workshop, Lorentz Center,
+                            Leiden, Netherlands.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Jul 2025</span>
+                        <span>Gave a talk at the Machine Learning and Mathematics workshop, Korea Institute for Advanced
+                            Study (KIAS), Seoul.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">May 2025</span>
+                        <span>Gave a talk at the Mathematics for and by Large Language Models workshop, Institut des
+                            Hautes Études Scientifiques (IHES), Bures-sur-Yvette.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Apr 2025</span>
+                        <span>Gave a talk at the Deep Learning Models for Mathematics and Type Theory workshop, Chalmers
+                            AI Research Centre (CHAIR), Gothenburg, Sweden.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Jul 2024</span>
+                        <span>Gave a talk at the Sacl-AI 4 Science Workshop, Palaiseau.</span>
+                    </li>
+                    <li class="update-item">
+                        <span class="update-date">Sep 2023</span>
+                        <span>Gave a talk at the Congrès des Jeunes Chercheurs en Mathématiques et Applications
+                            (CJC-MA), CentraleSupélec, Gif-sur-Yvette.</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Publications Section -->
+            <section id="publications">
+                <h2>Selected Publications</h2>
+
+                <div id="publications-container">
+                    <p>Loading publications...</p>
+                </div>
+                <script>
+                    fetch('papers.html')
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('publications-container').innerHTML = html;
+                        })
+                        .catch(error => {
+                            console.error('Error loading publications:', error);
+                            document.getElementById('publications-container').innerHTML = '<p>Error loading publications.</p>';
+                        });
+                </script>
+                <p style="margin-top: 1rem;"><a href="https://scholar.google.com/citations?user=fcJXuBkAAAAJ"
+                        target="_blank">See all publications on Google Scholar &rarr;</a></p>
+            </section>
+        </main>
+
+        <footer
+            style="margin-top: 4rem; text-align: center; padding-bottom: 2rem; color: var(--secondary-text); font-size: 0.85rem;">
+            &copy; 2026 Fabian Glöckle.
+        </footer>
+    </div>
+
+    <script src="js/theme.js" defer></script>
+</body>
+
+</html>

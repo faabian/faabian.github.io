@@ -1,0 +1,470 @@
+:root {
+  /* Color Palette - Minimalist Academic */
+  --bg-color: #fafafa;
+  --text-color: #111111;
+  --secondary-text: #555555;
+  --accent-color: #0b66c2;
+  --accent-hover: #004182;
+  --border-color: #eaeaea;
+  --card-bg: #ffffff;
+  --header-bg: rgba(250, 250, 250, 0.85);
+  
+  /* Typography */
+  --font-sans: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
+/* Manual theme overrides (set via html[data-theme]) */
+html[data-theme="light"] {
+  --bg-color: #fafafa;
+  --text-color: #111111;
+  --secondary-text: #555555;
+  --accent-color: #0b66c2;
+  --accent-hover: #004182;
+  --border-color: #eaeaea;
+  --card-bg: #ffffff;
+  --header-bg: rgba(250, 250, 250, 0.85);
+}
+
+html[data-theme="dark"] {
+  /* Softer dark mode: slightly lighter surfaces + less stark text */
+  --bg-color: #202124;
+  --text-color: #e6e6e9;
+  --secondary-text: #b3b3bb;
+  --accent-color: #60a5fa;
+  --accent-hover: #93c5fd;
+  --border-color: #3a3a42;
+  --card-bg: #26272b;
+  --header-bg: rgba(32, 33, 36, 0.85);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Softer dark mode: slightly lighter surfaces + less stark text */
+    --bg-color: #202124;
+    --text-color: #e6e6e9;
+    --secondary-text: #b3b3bb;
+    --accent-color: #60a5fa;
+    --accent-hover: #93c5fd;
+    --border-color: #3a3a42;
+    --card-bg: #26272b;
+    --header-bg: rgba(32, 33, 36, 0.85);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px; /* Accounts for sticky header */
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Layout */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+p {
+  margin-bottom: 1.25rem;
+  color: var(--text-color);
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+/* Top site navigation header (avoid styling article/post <header> blocks) */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--header-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 1.5rem 0; /* Slightly more vertical padding inside header */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* Much softer line */
+  margin-bottom: 3.5rem; /* Pushes the H1 further down */
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.75rem;
+}
+
+.site-header--no-brand {
+  justify-content: flex-end;
+}
+
+/* Make sure the dark mode border is also subtle */
+@media (prefers-color-scheme: dark) {
+  .site-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+.logo {
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.logo:hover {
+  color: var(--text-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+}
+
+nav a {
+  color: var(--secondary-text);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+nav button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--secondary-text);
+  font: inherit;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+nav button:hover {
+  color: var(--text-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+}
+
+/* Settings dropdown (theme switcher) */
+nav details {
+  position: relative;
+}
+
+nav summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  color: var(--secondary-text);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+nav summary::-webkit-details-marker {
+  display: none;
+}
+
+nav summary:hover {
+  color: var(--text-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+}
+
+nav details[open] summary {
+  color: var(--text-color);
+}
+
+.settings-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.75rem);
+  min-width: 160px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  z-index: 200;
+}
+
+.settings-dropdown button {
+  width: 100%;
+  text-align: left;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.settings-dropdown button:hover {
+  text-decoration: none;
+  color: var(--text-color);
+  background: var(--bg-color);
+}
+
+.settings-dropdown button[data-active="true"] {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+nav a:hover {
+  color: var(--text-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+}
+
+nav a.active {
+  color: var(--text-color);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  box-shadow: none; /* Clears the old weird box effect */
+}
+
+/* Intro Section */
+.intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5rem;
+  margin-bottom: 4rem;
+}
+
+.intro-text {
+  flex: 1;
+}
+
+.social-links {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.social-links a {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--secondary-text);
+}
+
+.social-links a:hover {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+/* Profiles/Avatars */
+.profile-pic {
+  width: 220px;
+  height: auto;
+  max-height: 320px;
+  border-radius: 12px;
+  object-fit: cover;
+  background-color: var(--border-color);
+  flex-shrink: 0;
+  /* Dim slightly to blend gracefully, retaining full color warmth */
+  filter: brightness(0.9) contrast(0.95);
+  transition: filter 0.4s ease, transform 0.4s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.profile-pic:hover {
+  filter: brightness(1.02) contrast(1.02);
+  transform: scale(1.02);
+}
+
+/* Updates/Timeline (Terminal Structure) */
+.updates-list {
+  list-style: none;
+  margin-bottom: 4rem;
+}
+
+.update-item {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  align-items: baseline;
+}
+
+.update-date {
+  color: var(--secondary-text);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  min-width: 85px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Publications */
+.publication {
+  margin-bottom: 2rem;
+}
+
+.pub-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-color);
+}
+
+.pub-authors {
+  color: var(--secondary-text);
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.pub-venue {
+  font-style: italic;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.pub-links {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+}
+
+.pub-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--font-mono);
+}
+
+.intro-header.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  .desktop-only {
+    display: none !important;
+  }
+  
+  .intro-header.mobile-only {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  
+  .intro-header h1 {
+    font-size: 2.1rem;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .profile-pic-mobile {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .container {
+    padding: 0 10px;
+  }
+
+  body {
+    font-size: 0.95rem;
+  }
+
+  h1 {
+    font-size: 2.1rem;
+  }
+
+  h2 {
+    font-size: 1.35rem;
+    margin-top: 3rem;
+  }
+
+  .intro {
+    flex-direction: column;
+  }
+  
+  .profile-pic {
+    width: 140px;
+    height: auto;
+  }
+  
+  .update-item {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .update-date {
+    text-align: left;
+  }
+  
+  .site-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  nav ul {
+    justify-content: center;
+    gap: 1.5rem;
+  }
+}

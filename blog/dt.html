@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Decision Theories to Multi-Agent Reinforcement Learning | Fabian Gloeckle</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <!-- Adjust path relative to the blog directory -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/blog.css">
+
+        <script>
+            (function () {
+                try {
+                    var theme = localStorage.getItem('theme');
+                    if (theme === 'light' || theme === 'dark') {
+                        document.documentElement.setAttribute('data-theme', theme);
+                    }
+                } catch (e) {
+                    // ignore
+                }
+            })();
+        </script>
+    
+    <!-- MathJax for LaTeX Support -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, function (doc) {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+              }
+            }, '']
+          }
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <a href="../index.html" class="logo" aria-label="Home">Fabian Gloeckle</a>
+            <nav>
+                <ul>
+                    <li><a href="../assets/CV.pdf" target="_blank">CV</a></li>
+                    <li><a href="../index.html#publications">Publications</a></li>
+                    <li><a href="../blog.html" class="active">Blog</a></li>
+                    <li>
+                        <details>
+                            <summary aria-label="Settings" title="Settings">⚙</summary>
+                            <div class="settings-dropdown" aria-label="Theme">
+                                <button type="button" data-set-theme="system">Theme: System</button>
+                                <button type="button" data-set-theme="dark">Theme: Dark</button>
+                                <button type="button" data-set-theme="light">Theme: Light</button>
+                            </div>
+                        </details>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <a href="../blog.html" class="back-link">&larr; Back to all posts</a>
+            
+            <article>
+                <header class="post-header">
+                    <h1>From Decision Theories to Multi-Agent Reinforcement Learning</h1>
+                    <div class="post-meta">Published on Mar 26, 2026</div>
+                    <div class="post-tags"><span class="tag-chip">Alignment</span><span class="tag-chip">RL</span></div>
+                </header>
+                
+                <div class="post-content">
+<p>In the last post on Newcomb's problem, we briefly touched the different rational decision theories that lead to the one-box and two-box policies, and mused about their correlations with positions on alignment.
+As it turns out, Newcomb's problem is actually a classical dilemma in decision theory, the mathematical framework in which many questions about AI alignment can be discussed. These are my notes from learning the subject.</p>
+<p>Let us first take a look at the setup and two classical decision theories discussed in the context of Newcomb's problem.</p>
+<p>A <em>decision task</em> is an optimization problem where, given a stochastic environment reward <script type="math/tex">R</script>, the policy <script type="math/tex">\pi</script> needs to be chosen to maximize the expected payout <script type="math/tex">\mathbb{E}_\pi[R]</script>. The optimal policy is denoted by <script type="math/tex">\pi^*</script>. Unlike reinforcement learning environments modeled as Markov decision processes (MDPs) where the transition function <script type="math/tex">T(s, a)</script> depends on the state <script type="math/tex">s</script> and the action <script type="math/tex">a</script>, decision-theoretic environments allow <em>predictors</em>: the transition function <script type="math/tex">T(s, \pi)</script> is allowed to depend on the full policy <script type="math/tex">\pi</script>.</p>
+<p>According to Joyce's representation theorem, conditional likelihood and preference rankings that obey certain axioms give rise to a global <em>supposition function</em> <script type="math/tex">P(a \to o \mid x)</script> and utility function <script type="math/tex">u(x)</script> from which an expected utility can be defined as
+<script type="math/tex; mode=display">V(x \mid a) = \sum_i P(a \to o_i \mid x) u(o_i).</script>
+</p>
+<p>Crucially, decision theories differ not in their notions of value, but in their supposition functions.</p>
+<p><strong>Evidential Decision Theory (EDT)</strong> sets <script type="math/tex">P(a \to o \mid x) = P(o \mid x, a)</script> as standard Bayesian conditioning, regardless of causal structure. If in Newcomb's problem, the agent's <em>predisposition</em> <script type="math/tex">C</script> affects both <em>prediction</em> <script type="math/tex">Y</script> and <em>action</em> <script type="math/tex">A</script>, conditioning on <script type="math/tex">A = a</script> changes the distribution of predictions <script type="math/tex">Y</script> via <script type="math/tex">C</script>.</p>
+<p><strong>Causal Decision Theory (CDT)</strong> introduces the concept of a <em>causal intervention</em>. In Judea Pearl's <script type="math/tex">do</script> calculus, a causal structure is assumed to be given, i.e. an orientation of the undirected conditional dependence graph that makes it a directed acyclic graph. The supposition function can then be set as <script type="math/tex">P(a \to o \mid x) = P(o \mid x, do(A = a))</script>, with the meaning of: remove all incoming edges to <script type="math/tex">A</script>, then evaluate the conditional <script type="math/tex">P(o \mid x, A=a)</script> in the new graph.</p>
+<p>EDT one-boxes in Newcomb's problem because one-boxing is correlated with a full second box, while CDT two-boxes because the (physical) causal graph dictates that the action cannot influence the content of the box.</p>
+<p>There are also examples where EDT acts suboptimally (e.g. the smoking lesion problem), and ultimately, neither of them is apt for predictor environments where the policy can be instantiated by a predictor (e.g. in Parfit's hitchhiker problem) or face itself (e.g. in the twin prisoner's dilemma).</p>
+<p>There are two more recent developments in decision theory attempting to find a formal framework capable of resolving such predictor dilemmas.</p>
+<p><strong>Updateless Decision Theory (UDT)</strong> introduces the notion of <em>pre-commitment</em> to a deterministic policy, which resolves the question of how to deal with multiple instantiations of <script type="math/tex">\pi</script> in the environment. It can be defined simply as computing the optimal policy <script type="math/tex">\pi^*</script> upfront and following it at evaluation time. An initial version operated with pre-commitment to unconditional actions, but pre-commitment to the full policy (conditional actions) is required to solve problems such as the transparent version of Newcomb's problem where the agent can pre-commit to one-boxing <em>except if</em> the second box should happen to be empty.</p>
+<p><strong>Functional Decision Theory (FDT)</strong> attempts to provide a formal framework for <em>computing</em> <script type="math/tex">\pi^*</script> in certain situations. It treats the output of running the algorithm on observation <script type="math/tex">x</script> within a world model <script type="math/tex">M</script> as a variable <script type="math/tex">FDT(\ulcorner M \urcorner, \ulcorner x \urcorner)</script> within <script type="math/tex">M</script>. (According to Kleene's second recursion theorem, such quoted variables can easily be represented.) 
+FDT then argues that we should set <script type="math/tex">P(a \to o \mid x) = P(o \mid x, do(FDT(x) = a))</script>, which would allow reasoning about actions in state <script type="math/tex">x</script> as pre-committed, causal interventions.
+This contrasts with CDT where there is no such notion of pre-committed actions in a given state, breaking the logical linking between multiple instantiations of <script type="math/tex">\pi</script> in Newcomblike environments.</p>
+<p>However, the exact scientific status of FDT remains disputed. While the construction of quoted variables <script type="math/tex">\ulcorner x \urcorner</script> appears logically sound, the notion of conditioning on a causal intervention by a false statement (a function outputting something that it doesn't output) cannot be given a value in standard probability theory.
+This is the problem of <em>counterpossibles</em>, counterfactuals with impossible antecedents. Perhaps the FDT equations could be viewed as fixpoint equations that constrain the optimal policy, not as defining equations.</p>
+<p>Moreover, the FDT authors further argue that a policy-level variant should be used that conditions on the choice of the entire algorithm <script type="math/tex">do(FDT=\pi)</script> in order to solve multi-agent coordination problems. 
+While conceptually correct, this removes the computational appeal of FDT, collapsing FDT to the same abstract definition as UDT: the optimal policy is a deterministic policy that "implicitly knows about itself".
+Follow-up works on Logical Induction at MIRI approach the question of epistemic beliefs about logical statements over time (amount of compute), but crucially still lack a mechanism for counterfactual intervention as required by FDT.</p>
+<h2>Decision Theories and RL</h2>
+<p>Which decision theories do RL algorithms converge to? Can they extend from Markov decision processes (MDPs) to Newcomblike decision processes (NDPs) with predictors as defined above? The following sections are less well researched (I expect there to be plenty of existing literature and thought experiments), but represent my notes from learning and thinking about the subject, including where I question the usefulness of the decsion-theoretic framing. </p>
+<h3>Stochastic policies</h3>
+<p>So far, we have ignored questions about deterministic vs stochastic policies. Since a stochastic policy can be parametrized by a deterministic function, this situation is covered by the UDT definition of optimal pre-committed policies. Again, policy-level FDT reduces to UDT, while action-level FDT is unable to represent all optimal policies, including stochastic ones.</p>
+<p>LLMs are a prime example of deterministic functions that parametrize distributions, sampling from which defines stochastic policies. How would we frame this in Newcomblike environments with predictors? We can obtain a perfect predictor by giving at access to the weights <script type="math/tex">\theta</script>
+<em>and</em> the sampling seed of the random number generator. The policy is fully deterministic from the point of view of the predictor. (The predictor is white box attacker.)  Conversely, we can have the predictor treat the policy as a true stcohastic policy without access to the sampling seed. (The predictor is a black box attacker.)</p>
+<p>Offline reinforcement learning is concerned with <script type="math/tex">\mathbb{E}[R \mid s, a]</script>, i.e. it could be seen as implementing EDT, which comes with its known shortcomings from confounders and spurious correlations.
+Online RL addresses this issue by implementing an exploration mechanism (e.g. <script type="math/tex">\epsilon</script>-greedy or softmax sampling) that serves as a causal intervention: by means of sampling actions, the algorithm approximates <script type="math/tex"> \mathbb{E}[R \mid s, do(a)]</script> and online RL algorithms could be seen as an implementation of CDT.</p>
+<p>Value-based online RL is therefore unsound in Newcomblike environments: the Bellman equation assumes an MDP structure and conflates <script type="math/tex">Q</script>-values for the same <script type="math/tex">(s,a)</script>-pair coming from different policies <script type="math/tex">\pi</script>.
+On the other hand, in the open-box case of predictors with access to the seed, policy gradient methods already operate at the level of pre-committed policies. This is the UDT setup and <em>converged</em> policy gradient policies should be optimal.</p>
+<p>We will leave open the questions of predictors for stochastic policies as it would likely require a proper adversarial objective for the predictor, and of treating the learning process as an environment instead of the converged policy. The latter is the question of alignment and requires a separate post.</p>
+<h3>Performative RL and Multi-Agent RL</h3>
+<p>As mentioned above, value-based RL relies on the Bellman equation for MDPs, which is false for general NDPs where the environment dynamics <script type="math/tex">T(s, \pi)</script> may depend upon the full policy as well as the reward <script type="math/tex">R(s, \pi)</script>. Performative reinforcement learning studies reinforcement learning where the environment depends upon a policy <script type="math/tex">\mu</script>. The overall objective is hence of the form <script type="math/tex">J(\pi, \mu)</script> and the Newcombike case is where <script type="math/tex">\mu = \pi</script>, i.e. <script type="math/tex">J(\pi, \pi)</script>. Unlike in the case of MDPs, the performative Bellman equation no longer lends itself to an iteration algorithm for computing <script type="math/tex">Q</script>-values. Policy-gradient methods instead can be salvaged: the performative policy gradient theorem adds the additional terms resulting from environment drift <script type="math/tex">\nabla_\theta \log T_\theta</script> and <script type="math/tex">\nabla_\theta R_\theta</script> that are dropped in MDPs where <script type="math/tex">T</script> and <script type="math/tex">R</script> do not depend on <script type="math/tex">\theta</script>.</p>
+<p>Whether we actually have access to differentiable environment dynamics depends upon the setup. The only situation where <script type="math/tex">\theta</script> could currently be used realistically in the environment is by running inference on the policy, in which case the situation is dealt with by game-theoretic approaches to multi-agent reinforcement learning. This is likely the correct setup for studying such problems in machine learning in practice: it is stochastic by design, does not search for discrete rational decision rules in vain, but uses the established notions of policy optimization, equilibria and convergence to solve problems without closed-form solution. </p>
+<p>In practice, having access to differentiable environment dynamics <script type="math/tex">T(s,\pi​)</script> is rare. The realistic scenario where <script type="math/tex">\pi</script> directly influences the environment is when the environment - or another agent within it - runs inference on the policy. This shifts the framework from single-agent performative RL to Multi-Agent Reinforcement Learning (MARL).</p>
+<p>MARL provides the machine learning framework for dealing with Newcomblike decision processes without the need for a discrete rational decision rule such as FDT. Game-theoretic RL treats the predictor as a player, is stochastic by design and provides the notion of convergence to joint equilibria which captures that of optimal behavior.</p>
+<h2>References</h2>
+<p>Gerstgrasser, Matthias, and David C. Parkes. "Oracles &amp; followers: Stackelberg equilibria in deep multi-agent reinforcement learning." International Conference on Machine Learning. <a href="https://proceedings.mlr.press/v202/gerstgrasser23a/gerstgrasser23a.pdf">PMLR, 2023.</a></p>
+<p>Gerstgrasser, Matthias, and David C. Parkes. "Oracles &amp; followers: Stackelberg equilibria in deep multi-agent reinforcement learning." International Conference on Machine Learning. <a href="https://proceedings.mlr.press/v202/gerstgrasser23a/gerstgrasser23a.pdf">PMLR, 2023.</a></p>
+<p>Joyce, James M. The foundations of causal decision theory. Cambridge University Press, 1999. <a href="https://gwern.net/doc/statistics/decision/1999-joyce.pdf">Chapter PDF.</a></p>
+<p>Yudkowsky, Eliezer, and Nate Soares. "Functional decision theory: A new theory of instrumental rationality." <a href="https://arxiv.org/abs/1710.05060">Arxiv.</a></p>
+                </div>
+            </article>
+        </main>
+        
+        <footer style="margin-top: 5rem; text-align: center; padding-bottom: 2rem; color: var(--secondary-text); font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 2rem;">
+            &copy; 2026 Fabian Glöckle.
+        </footer>
+    </div>
+
+    <script src="../js/theme.js" defer></script>
+</body>
+</html>
