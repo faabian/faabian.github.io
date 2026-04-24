@@ -1,5 +1,45 @@
 [
   {
+    "title": "Automatic Textbook Formalization",
+    "authors": "Fabian Gloeckle, Ahmad Rammal, Charles Arnal, Remi Munos, Vivien Cabannes, Gabriel Synnaeve, Amaury Hayat",
+    "venue": "arXiv preprint, 2026",
+    "year": "2026",
+    "link": "https://arxiv.org/abs/2604.03071",
+    "link_type": "[arXiv]",
+    "extra_links": [
+      {
+        "url": "https://faabian.github.io/algebraic-combinatorics/",
+        "label": "[Blueprint]"
+      },
+      {
+        "url": "https://github.com/faabian/algebraic-combinatorics",
+        "label": "[Formalization]"
+      },
+      {
+        "url": "https://github.com/facebookresearch/repoprover",
+        "label": "[Code]"
+      }
+    ]
+  },
+  {
+    "title": "WybeCoder: Verified Imperative Code Generation",
+    "authors": "Fabian Gloeckle, Mantas Baksys, Darius Feher, Kunhao Zheng, Amaury Hayat, Sean B. Holden, Gabriel Synnaeve, Peter O'Hearn",
+    "venue": "arXiv preprint, 2026",
+    "year": "2026",
+    "link": "https://arxiv.org/abs/2603.29088",
+    "link_type": "[arXiv]",
+    "extra_links": [
+      {
+        "url": "https://facebookresearch.github.io/wybecoder",
+        "label": "[Website]"
+      },
+      {
+        "url": "https://github.com/facebookresearch/wybecoder",
+        "label": "[Code]"
+      }
+    ]
+  },
+  {
     "title": "LemmaBench: A Live, Research-Level Benchmark to Evaluate LLM Capabilities in Mathematics",
     "authors": "Antoine Peyronnet, Fabian Gloeckle, Amaury Hayat",
     "venue": "arXiv preprint, 2026",
